@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-cn"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="renderer" content="webkit">
+    <title>项目信息</title>
+    <link rel="stylesheet" type="text/css" th:href="@{../css/pintuer.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/admin.css}">
+    <script type="text/javascript" th:src="@{../js/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{../js/pintuer.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{../css/projectinfo.css}">
+</head>
+<body>
+<div class="left">
+    <div class="issues box">
+        <h3 class="icon icon-issue">问题跟踪</h3>
+        <table class="list issue-report">
+            <thead>
+            <tr>
+                <th></th>
+                <th>打开</th>
+                <th>已关闭</th>
+                <th>合计</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="name">
+                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;tracker_id=5">页面</a>
+                </td>
+                <td>
+                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;tracker_id=5">0</a>
+                </td>
+                <td>
+                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;status_id=c&amp;tracker_id=5">0</a>
+                </td>
+                <td class="total">
+                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;status_id=%2A&amp;tracker_id=5">0</a>
+                </td>
+            </tr>
+            <tr>
+                <td class="name">
+                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;tracker_id=1">BUG</a>
+                </td>
+                <td>
+                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;tracker_id=1">2</a>
+                </td>
+                <td>
+                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;status_id=c&amp;tracker_id=1">33</a>
+                </td>
+                <td class="total">
+                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;status_id=%2A&amp;tracker_id=1">35</a>
+                </td>
+            </tr>
+            <tr>
+                <td class="name">
+                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;tracker_id=6">数据</a>
+                </td>
+                <td>
+                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;tracker_id=6">0</a>
+                </td>
+                <td>
+                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;status_id=c&amp;tracker_id=6">0</a>
+                </td>
+                <td class="total">
+                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;status_id=%2A&amp;tracker_id=6">0</a>
+                </td>
+            </tr>
+            <tr>
+                <td class="name">
+                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;tracker_id=2">需求</a>
+                </td>
+                <td>
+                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;tracker_id=2">2</a>
+                </td>
+                <td>
+                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;status_id=c&amp;tracker_id=2">0</a>
+                </td>
+                <td class="total">
+                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;status_id=%2A&amp;tracker_id=2">2</a>
+                </td>
+            </tr>
+            <tr>
+                <td class="name">
+                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;tracker_id=3">疑难杂症</a>
+                </td>
+                <td>
+                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;tracker_id=3">0</a>
+                </td>
+                <td>
+                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;status_id=c&amp;tracker_id=3">0</a>
+                </td>
+                <td class="total">
+                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;status_id=%2A&amp;tracker_id=3">0</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <p>
+            <a href="/redmine/projects/shutcminstrument/issues?set_filter=1">查看所有问题</a>
+        </p>
+    </div>
+    <div class="spent_time box">
+        <h3 class="icon icon-time">耗时</h3>
+        <p>0.00 小时</p>
+    </div>
+</div>
+<div class="right">
+    <div class="members box">
+        <h3 class="icon icon-groupnonmember">成员</h3>
+        <p><span class="label">Manager:</span> <a class="user active" href="/redmine/users/24">刘盼</a>, <a
+                class="user active" href="/redmine/users/7">徐立利</a></p>
+        <p><span class="label">Developer:</span> <a class="user active" href="/redmine/users/83">付世亮</a>, <a
+                class="user active" href="/redmine/users/88">伍菁</a>, <a class="user active"
+                                                                        href="/redmine/users/68">吴奇臻</a>, <a
+                class="user active" href="/redmine/users/5">姚剑平</a>, <a class="user active"
+                                                                        href="/redmine/users/90">施陈杰</a>, <a
+                class="user active" href="/redmine/users/82">李涵</a>, <a class="user active"
+                                                                        href="/redmine/users/11">陈雅雯</a>, <a
+                class="user active" href="/redmine/users/96">陈青</a></p>
+        <p><span class="label">Reporter:</span> <a class="user active" href="/redmine/users/88">伍菁</a>, <a
+                class="user active" href="/redmine/users/24">刘盼</a>, <a class="user active"
+                                                                        href="/redmine/users/90">施陈杰</a></p>
+    </div>
+</div>
+</body>
+</html>
