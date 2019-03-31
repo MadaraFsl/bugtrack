@@ -8,6 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service("ShareService")
 public class ShareServiceImpl implements ShareService {
 
@@ -23,5 +25,10 @@ public class ShareServiceImpl implements ShareService {
             return user;
         }
         return null;
+    }
+
+    @Override
+    public List<User> getAllUser() {
+        return userDao.getAllUser();
     }
 }

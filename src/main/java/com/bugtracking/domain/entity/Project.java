@@ -1,13 +1,13 @@
 package com.bugtracking.domain.entity;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "project")
 public class Project {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "project_id", unique = true, nullable = false)
     private Integer projectId;
 
@@ -25,6 +25,17 @@ public class Project {
 
     @Column(name = "project_databaseUrl")
     private String projectDatabaseUrl;
+
+    @Column(name = "project_createTime")
+    private String projectCreateTime;
+
+    public String getProjectCreateTime() {
+        return projectCreateTime;
+    }
+
+    public void setProjectCreateTime(String projectCreateTime) {
+        this.projectCreateTime = projectCreateTime;
+    }
 
     public Integer getProjectId() {
         return projectId;

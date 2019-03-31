@@ -28,26 +28,26 @@ public class FrameWorkController {
 
         User user = shareService.getUser();
         String action = request.getParameter("action");
-
-        switch (action){
-            case "show":
-                break;
-            case "edit":
-                String mpass = request.getParameter("mpass");
-                BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-                if(bCryptPasswordEncoder.matches(mpass,user.getPassword())){
-                    String newpass = request.getParameter("newpass");
-                    user.setPassword(bCryptPasswordEncoder.encode(newpass));
-                    userDao.saveAndFlush(user);
-                    map.put("tips","ok");
-                }
-                else {
-                    map.put("tips","failed");
-                }
-                map.put("url","password?action=show");
-                return "tips";
+        if (action != null) {
+            switch (action) {
+                case "show":
+                    break;
+                case "edit":
+                    String mpass = request.getParameter("mpass");
+                    BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+                    if (bCryptPasswordEncoder.matches(mpass, user.getPassword())) {
+                        String newpass = request.getParameter("newpass");
+                        user.setPassword(bCryptPasswordEncoder.encode(newpass));
+                        userDao.saveAndFlush(user);
+                        map.put("tips", "ok");
+                    } else {
+                        map.put("tips", "failed");
+                    }
+                    map.put("url", "password?action=show");
+                    return "tips";
+            }
         }
-        map.put("username",user.getUsername());
+        map.put("username", user.getUsername());
         return "password";
     }
 
@@ -67,11 +67,11 @@ public class FrameWorkController {
                 // 登陆成功,获取登陆者详细信息
                 Object pinciba = auth.getPrincipal();
                 if (pinciba instanceof UserDetails) {
-                    UserDetails userDetails = (UserDetails)pinciba;
-                    map.put("user",userDetails);
+                    UserDetails userDetails = (UserDetails) pinciba;
+                    map.put("user", userDetails);
                     User user = userDao.getUserByName(userDetails.getUsername());
-                    map.put("realName",user.getCname());
-                    request.getSession().setAttribute("REALNAME",user.getCname());
+                    map.put("realName", user.getCname());
+                    request.getSession().setAttribute("REALNAME", user.getCname());
                 }
 
 
