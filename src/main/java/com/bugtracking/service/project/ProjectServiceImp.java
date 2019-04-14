@@ -1,13 +1,16 @@
 package com.bugtracking.service.project;
 
+import com.bugtracking.domain.entity.User;
 import com.bugtracking.domain.repository.ProjectRepository;
 import com.bugtracking.tools.Util;
 import com.bugtracking.vo.ProjectVO;
+import com.bugtracking.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -46,25 +49,29 @@ public class ProjectServiceImp implements ProjectService {
     }
 
     @Override
-    public void saveMemberForProject(String projectId, String[] users) {
+    public void saveMemberForProject(String projectId, String[] users) throws SQLException {
 
         Statement stat = null;
-        try {
-            Connection connection = dataSource.getConnection();
-            stat = connection.createStatement();
-            for (int i = 0; i < users.length; i++) {
-                stat.addBatch("INSERT INTO user_project(project_id,user_id) VALUES(" + Integer.parseInt(projectId)+ ", '" + users[i] + "')");
-            }
-            stat.executeBatch();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                stat.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        Connection connection = dataSource.getConnection();
+        stat = connection.createStatement();
+        for (int i = 0; i < users.length; i++) {
+            stat.addBatch("INSERT INTO user_project(project_id,user_id) VALUES(" + Integer.parseInt(projectId) + ", '" + users[i] + "')");
         }
+        stat.executeBatch();
+        stat.close();
+    }
 
+    @Override
+    public List getMemberNotInProject(Integer projectId) {
+        String sql = " SELECT " +
+                " u.username, " +
+                " u.password, " +
+                " u.cname  " +
+                " FROM " +
+                " user AS u  " +
+                " WHERE " +
+                " u.username NOT IN ( SELECT user_id FROM user_project AS up WHERE project_id = "+projectId+" )";
+        Query query = entityManager.createNativeQuery(sql);
+        return Util.transferObjectsToList(query.getResultList(),new UserVO());
     }
 }

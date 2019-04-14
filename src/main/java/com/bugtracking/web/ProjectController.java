@@ -28,77 +28,90 @@ public class ProjectController {
     private ProjectRepository projectRepository;
 
     @RequestMapping("/myProject")
-    public String myProject(Map<String,Object> map){
-
+    public String myProject(Map<String, Object> map,HttpServletRequest request) {
         String username = shareService.getUser().getUsername();
-        List<ProjectVO> projectVOList =  projectService.getMyProject(username);
-        map.put("projectVOList",projectVOList);
-
+        List<ProjectVO> projectVOList = projectService.getMyProject(username);
+        map.put("projectVOList", projectVOList);
         return "myProject";
     }
 
     @RequestMapping("/projectInfo")
-    public String projectInfo(Map<String,Object> map){
-
-
+    public String projectInfo(Map<String, Object> map,String projectId) {
+        map.put("projectId",projectId);
         return "projectInfo";
     }
 
 
     @RequestMapping("/projectBug")
-    public String projectBug(Map<String,Object> map){
+    public String projectBug(Map<String, Object> map) {
 
 
         return "projectBug";
     }
 
     @RequestMapping("/addProject")
-    public String addProject(HttpServletRequest request, Map<String,Object> map,Project project){
+    public String addProject(HttpServletRequest request, Map<String, Object> map, Project project) {
         String action = request.getParameter("action");
-
-        if(action != null){
-            switch (action){
+        if (action != null) {
+            switch (action) {
                 case "show":
                     break;
                 case "add":
                     try {
                         project.setProjectCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-                        project.setProjectId(1);
-//                        project = projectRepository.saveAndFlush(project);
+                        project = projectRepository.saveAndFlush(project);
                     } catch (Exception e) {
                         e.printStackTrace();
-                        map.put("tips","failed");
+                        map.put("tips", "failed");
                         map.put("url", "addProject?action=show");
                         return "tips";
                     }
-                    map.put("projectId",project.getProjectId());
-                    map.put("userList",shareService.getAllUser());
+                    map.put("projectId", project.getProjectId());
+                    map.put("userList", projectService.getMemberNotInProject(project.getProjectId()));
                     return "addMember";
             }
         }
-
         return "addProject";
     }
 
     @RequestMapping("/addMember")
-    public String addMember(HttpServletRequest request, Map<String,Object> map){
-
-        String action = request.getParameter("action");
-
-        if(action != null){
-            switch (action){
+    public String addMember(HttpServletRequest request, Map<String, Object> map,String action,String projectId) {
+        if (action != null) {
+            switch (action) {
                 case "show":
-                    break;
+                    map.put("projectId", projectId);
+                    map.put("userList", projectService.getMemberNotInProject(Integer.parseInt(projectId)));
+                    return "addMember";
                 case "add":
-                    String projectId = request.getParameter("projectId");
-                    String[] users = request.getParameterValues("userId");
-                    projectService.saveMemberForProject(projectId,users);
-                    break;
+                    try {
+                        String[] users = request.getParameterValues("userId");
+                        if (users != null && users.length > 0) {
+                            projectService.saveMemberForProject(projectId, users);
+                        }
+                        map.put("tips", "ok");
+                        map.put("url", "myProject");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        map.put("tips", "failed");
+                        map.put("url", "addProject?action=show");
+                    }
+                    return "tips";
             }
         }
-
         return "";
     }
 
-
+    @RequestMapping("/addBug")
+    public String addBug(HttpServletRequest request, Map<String, Object> map,String action,String projectId) {
+        if (action != null) {
+            switch (action) {
+                case "show":
+                    map.put("projectId", projectId);
+                    return "addBug";
+                case "add":
+                    return "tips";
+            }
+        }
+        return "";
+    }
 }

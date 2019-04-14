@@ -17,7 +17,7 @@
 <body>
 <div class="left">
     <div class="issues box">
-        <h3 class="icon icon-issue">问题跟踪</h3>
+        <h3 class="icon icon-issue"><a th:href="@{../project/addBug(action='show',projectId=${projectId})}">问题</a></h3>
         <table class="list issue-report">
             <thead>
             <tr>
@@ -111,21 +111,21 @@
 </div>
 <div class="right">
     <div class="members box">
-        <h3 class="icon icon-groupnonmember">成员</h3>
-        <p><span class="label">Manager:</span> <a class="user active" href="/redmine/users/24">刘盼</a>, <a
-                class="user active" href="/redmine/users/7">徐立利</a></p>
-        <p><span class="label">Developer:</span> <a class="user active" href="/redmine/users/83">付世亮</a>, <a
-                class="user active" href="/redmine/users/88">伍菁</a>, <a class="user active"
-                                                                        href="/redmine/users/68">吴奇臻</a>, <a
-                class="user active" href="/redmine/users/5">姚剑平</a>, <a class="user active"
-                                                                        href="/redmine/users/90">施陈杰</a>, <a
-                class="user active" href="/redmine/users/82">李涵</a>, <a class="user active"
-                                                                        href="/redmine/users/11">陈雅雯</a>, <a
-                class="user active" href="/redmine/users/96">陈青</a></p>
-        <p><span class="label">Reporter:</span> <a class="user active" href="/redmine/users/88">伍菁</a>, <a
-                class="user active" href="/redmine/users/24">刘盼</a>, <a class="user active"
-                                                                        href="/redmine/users/90">施陈杰</a></p>
+        <h3 class="icon icon-groupnonmember"><a th:href="@{../project/addMember(action='show',projectId=${projectId})}">成员</a></h3>
+        <p>
+            <span><b>Manager:</b></span>
+            徐立利
+        </p>
+        <p>
+            <span><b>Developer:</b></span>
+            付世亮
+        </p>
+        <p><span><b>Reporter:</b></span>
+            刘盼
+        </p>
     </div>
 </div>
 </body>
+<script>
+</script>
 </html>

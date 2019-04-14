@@ -22,8 +22,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // User对应数据库中的用户表，是最终存储用户和密码的表，可自定义
-        // 本例使用User中的useraname作为用户名:
         User user = userDao.getUserByName(username);
         if (user == null) {
             throw new UsernameNotFoundException(username + " not found");

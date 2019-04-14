@@ -25,7 +25,6 @@ public class FrameWorkController {
 
     @RequestMapping("/password")
     public String password(Map map, HttpServletRequest request) {
-
         User user = shareService.getUser();
         String action = request.getParameter("action");
         if (action != null) {
