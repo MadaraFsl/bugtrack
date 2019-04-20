@@ -39,7 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     // security5.0之后需要密码加密
     @Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception{
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
         // 指定加密方法为BCrypt
         auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
     }
@@ -51,7 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()    //定义不需要认证就可以访问
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().loginPage("/login").defaultSuccessUrl("/login").successForwardUrl("/login")    //定义当需要用户登录时候，转到的登录页面
+                .formLogin().loginPage("/login").defaultSuccessUrl("/login").failureUrl("/login")   //定义当需要用户登录时候，转到的登录页面
                 .permitAll()
                 .and()
                 .logout()

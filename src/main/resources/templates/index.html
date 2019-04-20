@@ -35,17 +35,20 @@
     <ul style="display:block">
         <li><a th:href="@{project/myProject}" target="right"><span class="icon-caret-right"></span>我的项目</a></li>
         <li><a th:href="@{password(action='show')}" target="right"><span class="icon-caret-right"></span>修改密码</a></li>
-        <li><a th:href="@{project/projectBug}" target="right"><span class="icon-caret-right"></span>项目缺陷</a></li>
-        <li><a th:href="@{project/addProject(action='show')}" target="right"><span class="icon-caret-right"></span>新建项目</a></li>
+        <li><a th:href="@{project/projectBug}" target="right"><span class="icon-caret-right"></span>我的任务</a></li>
+        <li><a th:href="@{project/addProject(action='show')}" target="right"><span class="icon-caret-right"></span>新建项目</a>
+        </li>
         <li><a href="book.html" target="right"><span class="icon-caret-right"></span>留言管理</a></li>
         <li><a href="column.html" target="right"><span class="icon-caret-right"></span>栏目管理</a></li>
     </ul>
-    <h2><span class="icon-pencil-square-o"></span>栏目管理</h2>
-    <ul>
-        <li><a href="list.html" target="right"><span class="icon-caret-right"></span>内容管理</a></li>
-        <li><a href="add.html" target="right"><span class="icon-caret-right"></span>添加内容</a></li>
-        <li><a href="cate.html" target="right"><span class="icon-caret-right"></span>分类管理</a></li>
-    </ul>
+    <div th:if="${#strings.contains(session.ALLROLES,'ADMIN')}">
+        <h2><span class="icon-pencil-square-o"></span>系统管理</h2>
+        <ul>
+            <li><a th:href="@{addUser}" target="right"><span class="icon-caret-right"></span>新增用户</a></li>
+            <li><a href="add.html" target="right"><span class="icon-caret-right"></span>添加内容</a></li>
+            <li><a href="cate.html" target="right"><span class="icon-caret-right"></span>分类管理</a></li>
+        </ul>
+    </div>
 </div>
 <script type="text/javascript">
     $(function () {

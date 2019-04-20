@@ -1,12 +1,15 @@
 package com.bugtracking.web;
 
+import com.bugtracking.domain.entity.Buginfo;
 import com.bugtracking.domain.entity.Project;
+import com.bugtracking.domain.repository.BugInfoRepository;
 import com.bugtracking.domain.repository.ProjectRepository;
 import com.bugtracking.service.common.ShareService;
 import com.bugtracking.service.project.ProjectService;
 import com.bugtracking.vo.ProjectVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,9 +29,11 @@ public class ProjectController {
     private ProjectService projectService;
     @Autowired
     private ProjectRepository projectRepository;
+    @Autowired
+    private BugInfoRepository bugInfoRepository;
 
     @RequestMapping("/myProject")
-    public String myProject(Map<String, Object> map,HttpServletRequest request) {
+    public String myProject(Map<String, Object> map, HttpServletRequest request) {
         String username = shareService.getUser().getUsername();
         List<ProjectVO> projectVOList = projectService.getMyProject(username);
         map.put("projectVOList", projectVOList);
@@ -36,8 +41,39 @@ public class ProjectController {
     }
 
     @RequestMapping("/projectInfo")
-    public String projectInfo(Map<String, Object> map,String projectId) {
-        map.put("projectId",projectId);
+    public String projectInfo(Map<String, Object> map, String projectId) {
+        map.put("projectId", projectId);
+        // 获取管理员集合
+        List<Object[]> managerList = projectService.getMemberInProjectByAuthority(Integer.parseInt(projectId), 4);
+        if (managerList.size() > 0) {
+            StringBuilder managerStr = new StringBuilder();
+            for (int i = 0; i < managerList.size(); i++) {
+                managerStr.append(managerList.get(i)[1] + ",");
+            }
+            managerStr.deleteCharAt(managerStr.lastIndexOf(","));
+            map.put("managerStr", managerStr);
+        }
+        // 获取开发者集合
+        List<Object[]> developerList = projectService.getMemberInProjectByAuthority(Integer.parseInt(projectId), 3);
+        if (developerList.size() > 0) {
+            StringBuilder developerStr = new StringBuilder();
+            for (int i = 0; i < developerList.size(); i++) {
+                developerStr.append(developerList.get(i)[1] + ",");
+            }
+            developerStr.deleteCharAt(developerStr.lastIndexOf(","));
+            map.put("developerStr", developerStr);
+        }
+        // 获取测试人员集合
+        List<Object[]> testList = projectService.getMemberInProjectByAuthority(Integer.parseInt(projectId), 2);
+        if (testList.size() > 0) {
+            StringBuilder testStr = new StringBuilder();
+            for (int i = 0; i < testList.size(); i++) {
+                testStr.append(testList.get(i)[1] + ",");
+            }
+            testStr.deleteCharAt(testStr.lastIndexOf(","));
+            map.put("testStr", testStr);
+        }
+
         return "projectInfo";
     }
 
@@ -45,6 +81,10 @@ public class ProjectController {
     @RequestMapping("/projectBug")
     public String projectBug(Map<String, Object> map) {
 
+        Integer currPage = 1;
+        Integer pageSize = 20;
+
+        map.put("bugInfos", projectService.getMyBugInfo(shareService.getUser().getUsername(), currPage - 1, pageSize));
 
         return "projectBug";
     }
@@ -75,7 +115,7 @@ public class ProjectController {
     }
 
     @RequestMapping("/addMember")
-    public String addMember(HttpServletRequest request, Map<String, Object> map,String action,String projectId) {
+    public String addMember(HttpServletRequest request, Map<String, Object> map, String action, String projectId) {
         if (action != null) {
             switch (action) {
                 case "show":
@@ -102,13 +142,25 @@ public class ProjectController {
     }
 
     @RequestMapping("/addBug")
-    public String addBug(HttpServletRequest request, Map<String, Object> map,String action,String projectId) {
+    public String addBug(HttpServletRequest request, Map<String, Object> map, String action, String projectId, @ModelAttribute Buginfo buginfo) {
         if (action != null) {
             switch (action) {
                 case "show":
+                    map.put("bugTypes", shareService.getAllBugType());
+                    map.put("bugStatus", shareService.getAllBugStatus());
+                    map.put("bugPrioritys", shareService.getAllBugPriority());
+                    map.put("members", projectService.getMemberInProject(Integer.parseInt(projectId)));
+                    map.put("buginfo", new Buginfo());
                     map.put("projectId", projectId);
                     return "addBug";
                 case "add":
+                    buginfo.setBugCreater(shareService.getUser().getUsername());
+                    buginfo.setBugBegintime(new Date());
+                    buginfo.setBugUpdater(shareService.getUser().getUsername());
+                    buginfo.setBugUpdatetime(new Date());
+                    bugInfoRepository.saveAndFlush(buginfo);
+                    map.put("tips", "ok");
+                    map.put("url", "myProject");
                     return "tips";
             }
         }

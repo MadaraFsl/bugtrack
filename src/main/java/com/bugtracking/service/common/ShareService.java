@@ -10,4 +10,13 @@ public interface ShareService {
     User getUser();
 
     List<User> getAllUser();
+
+    List getAllBugType();
+
+    List getAllBugStatus();
+
+    List getAllBugPriority();
+
+    List getAuthoritys();
+
 }

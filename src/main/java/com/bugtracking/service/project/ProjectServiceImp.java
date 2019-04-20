@@ -3,6 +3,7 @@ package com.bugtracking.service.project;
 import com.bugtracking.domain.entity.User;
 import com.bugtracking.domain.repository.ProjectRepository;
 import com.bugtracking.tools.Util;
+import com.bugtracking.vo.BuginfoVo;
 import com.bugtracking.vo.ProjectVO;
 import com.bugtracking.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ public class ProjectServiceImp implements ProjectService {
 
 
         List<Object[]> list = entityManager.createNativeQuery(sql).getResultList();
-        return Util.transferObjectsToList(list, new ProjectVO());
+        return Util.transferObjectsToList(list, ProjectVO.class);
 
     }
 
@@ -70,8 +71,67 @@ public class ProjectServiceImp implements ProjectService {
                 " FROM " +
                 " user AS u  " +
                 " WHERE " +
-                " u.username NOT IN ( SELECT user_id FROM user_project AS up WHERE project_id = "+projectId+" )";
+                " u.username NOT IN ( SELECT user_id FROM user_project AS up WHERE project_id = " + projectId + " )";
         Query query = entityManager.createNativeQuery(sql);
-        return Util.transferObjectsToList(query.getResultList(),new UserVO());
+        return Util.transferObjectsToList(query.getResultList(), UserVO.class);
+    }
+
+    @Override
+    public List getMemberInProject(Integer projectId) {
+        String sql = " SELECT " +
+                " u.username, " +
+                " u.password, " +
+                " u.cname  " +
+                " FROM " +
+                " `user` AS u " +
+                " INNER JOIN user_project AS up ON u.username = up.user_id  " +
+                " WHERE " +
+                " up.project_id = " + projectId;
+        Query query = entityManager.createNativeQuery(sql);
+        return Util.transferObjectsToList(query.getResultList(), UserVO.class);
+    }
+
+    @Override
+    public List getMyBugInfo(String username, Integer currPage, Integer pageSize) {
+        String sql = " SELECT " +
+                " bi.bug_id, " +
+                " bt.type_name, " +
+                " ba.bugstatus_name, " +
+                " bp.`name`, " +
+                " bi.bug_name, " +
+                " ubi.cname AS bugCname, " +
+                " bi.bug_updatetime, " +
+                " uup.cname AS updater, " +
+                " bi.bug_begintime  " +
+                " FROM " +
+                " buginfo AS bi " +
+                " INNER JOIN user_project AS up ON bi.bug_project = up.project_id " +
+                " LEFT JOIN bugpriority AS bp ON bp.id = bi.bug_priority " +
+                " LEFT JOIN bugstatus AS ba ON ba.bugstatus_id = bi.bug_status " +
+                " LEFT JOIN bugtype AS bt ON bt.bugtype_id = bi.bug_type " +
+                " LEFT JOIN `user` AS ubi ON ubi.username = bi.bug_user " +
+                " LEFT JOIN `user` AS uup ON uup.username = bi.bug_updater  " +
+                " WHERE " +
+                " up.user_id = '" + username + "'" +
+                " LIMIT " + currPage + ", " + pageSize;
+        Query query = entityManager.createNativeQuery(sql);
+        return Util.transferObjectsToList(query.getResultList(), BuginfoVo.class);
+    }
+
+    @Override
+    public List getMemberInProjectByAuthority(Integer projectId, Integer authorityId) {
+        String sql = " SELECT " +
+                " u.username, " +
+                " u.cname, " +
+                " a.authority_cname  " +
+                " FROM " +
+                " `user` AS u " +
+                " INNER JOIN user_project AS up ON u.username = up.user_id " +
+                " LEFT JOIN user_authourity AS ua ON ua.user_id = u.username " +
+                " LEFT JOIN authority AS a ON a.id = ua.authourity_id  " +
+                " WHERE " +
+                " up.project_id = " + projectId +
+                " AND a.id = " + authorityId;
+        return entityManager.createNativeQuery(sql).getResultList();
     }
 }

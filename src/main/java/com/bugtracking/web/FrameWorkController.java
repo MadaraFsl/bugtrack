@@ -1,8 +1,15 @@
 package com.bugtracking.web;
 
+import com.bugtracking.domain.entity.Authority;
 import com.bugtracking.domain.entity.User;
 import com.bugtracking.domain.repository.UserRepository;
+import com.bugtracking.dto.UserDto;
 import com.bugtracking.service.common.ShareService;
+import com.bugtracking.vo.UserVO;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jdk.nashorn.internal.ir.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -10,11 +17,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import sun.security.provider.SHA;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
+import java.io.IOException;
+import java.util.*;
 
 @Controller
 public class FrameWorkController {
@@ -70,10 +80,18 @@ public class FrameWorkController {
                     map.put("user", userDetails);
                     User user = userDao.getUserByName(userDetails.getUsername());
                     map.put("realName", user.getCname());
-                    request.getSession().setAttribute("REALNAME", user.getCname());
+                    if (request.getSession().getAttribute("ALLROLES") == null) {
+                        // 获取所有权限
+                        Set<Authority> authoritySet = user.getAuthoritySet();
+                        StringBuilder authorityStr = new StringBuilder();
+                        Iterator<Authority> i = authoritySet.iterator();
+                        while (i.hasNext()) {
+                            authorityStr.append(i.next().getEname());
+                            authorityStr.append(",");
+                        }
+                        request.getSession().setAttribute("ALLROLES", authorityStr);
+                    }
                 }
-
-
                 return "index";
             }
         } catch (Exception e) {
@@ -82,4 +100,43 @@ public class FrameWorkController {
         }
     }
 
+    @RequestMapping("/addUser")
+    public String addUser(Map map) {
+        map.put("authoritys", shareService.getAuthoritys());
+        return "addUser";
+    }
+
+    @RequestMapping("/ajaxAddUser")
+    @ResponseBody
+    public String ajaxAddUser(@RequestBody String json) {
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+            UserDto userDto = objectMapper.readValue(json, UserDto.class);
+
+            User u = userDao.getUserByName(userDto.getUsername());
+            if (u == null) {
+                User user = new User();
+                user.setUsername(userDto.getUsername());
+                user.setCname(userDto.getCname());
+                user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
+                List list = userDto.getAuthoritys();
+                Set<Authority> set = new HashSet<>();
+                for (int i = 0; i < list.size(); i++) {
+                    Authority a = new Authority();
+                    a.setId(Integer.parseInt(list.get(i).toString()));
+                    set.add(a);
+                }
+                user.setAuthoritySet(set);
+                userDao.saveAndFlush(user);
+            } else {
+                return "repeat";
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "ok";
+    }
 }

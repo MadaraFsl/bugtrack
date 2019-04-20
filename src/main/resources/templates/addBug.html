@@ -18,12 +18,14 @@
     <div class="panel-head" id="add"><strong><span class="icon-pencil-square-o"></span>新建问题</strong></div>
     <div class="body-content">
         <form method="post" class="form-x" th:action="@{addBug(action='add')}">
+            <input type="hidden" name="bugProject" th:value="${projectId}"/>
             <div class="form-group">
                 <div class="label">
                     <label>问题名称：</label>
                 </div>
                 <div class="field">
-                    <input type="text" class="input w50" value="" name="projectName" data-validate="required:请输入问题名"/>
+                    <input type="text" class="input w50" value="" name="bugName"
+                           data-validate="required:请输入问题名"/>
                     <div class="tips"></div>
                 </div>
             </div>
@@ -32,10 +34,10 @@
                     <label>问题类型：</label>
                 </div>
                 <div class="field">
-                    <select  style="padding:10px 10px; border:1px solid #ddd;width: 12.5%;">
-                        <option>111</option>
-                        <option>222</option>
-                        <option>333</option>
+                    <select name="bugType"
+                            style="padding:10px 10px; border:1px solid #ddd;width: 12.5%;">
+                        <option th:each="bugType : ${bugTypes}" th:value="${bugType.id}"
+                                th:text="${bugType.name}"></option>
                     </select>
                     <div class="tips"></div>
                 </div>
@@ -45,7 +47,8 @@
                     <label>问题描述：</label>
                 </div>
                 <div class="field">
-                    <textarea class="input" name="projectDescribe" style=" height:190px;width: 70%"></textarea>
+                    <textarea class="input" name="bugDescribe"
+                              style=" height:190px;width: 70%"></textarea>
                     <div class="tips"></div>
                 </div>
             </div>
@@ -54,10 +57,10 @@
                     <label>问题状态：</label>
                 </div>
                 <div class="field">
-                    <select  style="padding:10px 10px; border:1px solid #ddd;width: 12.5%;">
-                        <option>111</option>
-                        <option>222</option>
-                        <option>333</option>
+                    <select name="bugStatus"
+                            style="padding:10px 10px; border:1px solid #ddd;width: 12.5%;">
+                        <option th:each="bugStat : ${bugStatus}" th:value="${bugStat.id}"
+                                th:text="${bugStat.name}"></option>
                     </select>
                     <div class="tips"></div>
                 </div>
@@ -67,10 +70,10 @@
                     <label>问题优先级：</label>
                 </div>
                 <div class="field">
-                    <select  style="padding:10px 10px; border:1px solid #ddd;width: 12.5%;">
-                        <option>111</option>
-                        <option>222</option>
-                        <option>333</option>
+                    <select name="bugPriority"
+                            style="padding:10px 10px; border:1px solid #ddd;width: 12.5%;">
+                        <option th:each="bugPriority : ${bugPrioritys}" th:value="${bugPriority.id}"
+                                th:text="${bugPriority.name}"></option>
                     </select>
                     <div class="tips"></div>
                 </div>
@@ -80,10 +83,10 @@
                     <label>问题指派给：</label>
                 </div>
                 <div class="field">
-                    <select  style="padding:10px 10px; border:1px solid #ddd;width: 12.5%;">
-                        <option>111</option>
-                        <option>222</option>
-                        <option>333</option>
+                    <select name="bugUser"
+                            style="padding:10px 10px; border:1px solid #ddd;width: 12.5%;">
+                        <option th:each="member : ${members}" th:value="${member.username}"
+                                th:text="${member.cname}"></option>
                     </select>
                     <div class="tips"></div>
                 </div>
@@ -93,7 +96,8 @@
                     <label>计划完成于：</label>
                 </div>
                 <div class="field">
-                    <input class="input w50" type="date"/>
+                    <input name="bugCompletetime" class="input w50" type="date"
+                           data-validate="required:请输入完成时间"/>
                     <div class="tips"></div>
                 </div>
             </div>
@@ -103,7 +107,7 @@
                     <label></label>
                 </div>
                 <div class="field">
-                    <button class="button bg-main icon-check-square-o" type="submit"> 创建并继续</button>
+                    <button class="button bg-main icon-check-square-o" type="submit"> 提交</button>
                 </div>
             </div>
         </form>

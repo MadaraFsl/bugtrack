@@ -29,17 +29,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         //对该用户下的所有权限进行身份记录
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         // 用户权限数
-        int roleNum = 0;
         for (Authority authority : user.getAuthoritySet()) {
             authorities.add(new SimpleGrantedAuthority("ROLE_" + authority.getEname()));
             System.err.println("username is " + username + ", " + authority.getCname());
-            RequestAttributes ra = RequestContextHolder.getRequestAttributes();
-            HttpServletRequest request = ((ServletRequestAttributes) ra).getRequest();
-            request.getSession().setAttribute("AUTHORITYNAME", authority.getEname());
-            request.getSession().setAttribute("AUTHORITYREALNAME", authority.getCname());
-            request.getSession().setAttribute("REALNAME", user.getCname());
-            roleNum++;
-            request.getSession().setAttribute("ROLENUM", roleNum);
         }
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
     }
