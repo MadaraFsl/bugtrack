@@ -100,6 +100,9 @@ public class ProjectController {
                     try {
                         project.setProjectCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                         project = projectRepository.saveAndFlush(project);
+                        String[] users = new String[1];
+                        users[0] = shareService.getUser().getUsername();
+                        projectService.saveMemberForProject(String.valueOf(project.getProjectId()), users);
                     } catch (Exception e) {
                         e.printStackTrace();
                         map.put("tips", "failed");
@@ -161,6 +164,35 @@ public class ProjectController {
                     bugInfoRepository.saveAndFlush(buginfo);
                     map.put("tips", "ok");
                     map.put("url", "myProject");
+                    return "tips";
+            }
+        }
+        return "";
+    }
+
+    @RequestMapping("/editBugInfo")
+    public String editBugInfo(HttpServletRequest request, Map<String, Object> map, String action, String bugId, @ModelAttribute Buginfo buginfo) {
+        if (action != null) {
+            switch (action) {
+                case "show":
+                    buginfo = bugInfoRepository.getOne(Integer.valueOf(bugId));
+                    map.put("buginfo", buginfo);
+                    map.put("bugTypes", shareService.getAllBugType());
+                    map.put("bugStatus", shareService.getAllBugStatus());
+                    map.put("bugPrioritys", shareService.getAllBugPriority());
+                    map.put("members", projectService.getMemberInProject(buginfo.getBugProject()));
+                    return "editBugInfo";
+                case "edit":
+                    Buginfo oldBugInfo = bugInfoRepository.getOne(Integer.valueOf(bugId));
+                    buginfo.setBugCreater(oldBugInfo.getBugCreater());
+                    buginfo.setBugBegintime(oldBugInfo.getBugBegintime());
+                    buginfo.setBugCompletetime(oldBugInfo.getBugCompletetime());
+                    buginfo.setBugProject(oldBugInfo.getBugProject());
+                    buginfo.setBugUpdater(shareService.getUser().getUsername());
+                    buginfo.setBugUpdatetime(new Date());
+                    bugInfoRepository.saveAndFlush(buginfo);
+                    map.put("tips", "ok");
+                    map.put("url", "projectBug");
                     return "tips";
             }
         }

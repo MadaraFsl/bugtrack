@@ -39,7 +39,8 @@
             <td th:text="${bugInfo.typeName}"></td>
             <td th:text="${bugInfo.status}"></td>
             <td th:text="${bugInfo.priorityName}"></td>
-            <td><a href="#" th:text="${bugInfo.name}"></a></td>
+            <td><a th:href="@{../project/editBugInfo(action='show',bugId=${bugInfo.bugId})}"
+                   th:text="${bugInfo.name}"></a></td>
             <td th:text="${bugInfo.toUser}"></td>
             <td th:text="${#strings.substring(bugInfo.updateTime,0,16)}"></td>
             <td th:text="${bugInfo.updater}"></td>

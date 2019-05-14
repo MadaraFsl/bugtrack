@@ -96,8 +96,8 @@ public class ProjectServiceImp implements ProjectService {
         String sql = " SELECT " +
                 " bi.bug_id, " +
                 " bt.type_name, " +
-                " ba.bugstatus_name, " +
-                " bp.`name`, " +
+                " ba.bugstatus_cname, " +
+                " bp.cname, " +
                 " bi.bug_name, " +
                 " ubi.cname AS bugCname, " +
                 " bi.bug_updatetime, " +
@@ -105,14 +105,13 @@ public class ProjectServiceImp implements ProjectService {
                 " bi.bug_begintime  " +
                 " FROM " +
                 " buginfo AS bi " +
-                " INNER JOIN user_project AS up ON bi.bug_project = up.project_id " +
                 " LEFT JOIN bugpriority AS bp ON bp.id = bi.bug_priority " +
                 " LEFT JOIN bugstatus AS ba ON ba.bugstatus_id = bi.bug_status " +
                 " LEFT JOIN bugtype AS bt ON bt.bugtype_id = bi.bug_type " +
                 " LEFT JOIN `user` AS ubi ON ubi.username = bi.bug_user " +
                 " LEFT JOIN `user` AS uup ON uup.username = bi.bug_updater  " +
                 " WHERE " +
-                " up.user_id = '" + username + "'" +
+                " bi.bug_user = '" + username + "'" +
                 " LIMIT " + currPage + ", " + pageSize;
         Query query = entityManager.createNativeQuery(sql);
         return Util.transferObjectsToList(query.getResultList(), BuginfoVo.class);

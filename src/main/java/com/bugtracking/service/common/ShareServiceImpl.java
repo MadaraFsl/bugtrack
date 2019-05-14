@@ -58,7 +58,7 @@ public class ShareServiceImpl implements ShareService {
     public List getAllBugStatus() {
         String sql = " SELECT " +
                 " bugstatus_id, " +
-                " bugstatus_name  " +
+                " bugstatus_cname  " +
                 " FROM " +
                 " bugstatus";
         Query query = entityManager.createNativeQuery(sql);
@@ -69,7 +69,7 @@ public class ShareServiceImpl implements ShareService {
     public List getAllBugPriority() {
         String sql = " SELECT " +
                 " id, " +
-                " `name`  " +
+                " cname  " +
                 " FROM " +
                 " bugpriority";
         Query query = entityManager.createNativeQuery(sql);

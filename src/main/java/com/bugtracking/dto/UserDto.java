@@ -1,9 +1,6 @@
 package com.bugtracking.dto;
 
-import com.bugtracking.domain.entity.Authority;
-
 import java.util.List;
-import java.util.Set;
 
 public class UserDto {
 

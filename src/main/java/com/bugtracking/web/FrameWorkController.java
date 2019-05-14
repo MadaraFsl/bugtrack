@@ -20,9 +20,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.LocaleResolver;
 import sun.security.provider.SHA;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.*;
 
@@ -32,6 +35,8 @@ public class FrameWorkController {
     private UserRepository userDao;
     @Autowired
     private ShareService shareService;
+    @Autowired
+    private LocaleResolver localeResolver;
 
     @RequestMapping("/password")
     public String password(Map map, HttpServletRequest request) {
@@ -63,6 +68,14 @@ public class FrameWorkController {
     @RequestMapping("/index")
     public String index(Map map, HttpServletRequest request) {
         return "index";
+    }
+
+    @RequestMapping("/switchingLanguage")
+    public String switchingLanguage(Map map, HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession();
+        Object s = session.getAttribute("LOCALE_SESSION_ATTRIBUTE_NAME");
+        localeResolver.setLocale(request, response, Locale.SIMPLIFIED_CHINESE);
+        return "redirect:/login";
     }
 
     @RequestMapping("/login")
@@ -133,7 +146,6 @@ public class FrameWorkController {
             } else {
                 return "repeat";
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }

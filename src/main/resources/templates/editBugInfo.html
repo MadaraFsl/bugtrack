@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-cn"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="renderer" content="webkit">
+    <title></title>
+    <link rel="stylesheet" type="text/css" th:href="@{../css/pintuer.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/admin.css}">
+    <script type="text/javascript" th:src="@{../js/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{../js/pintuer.js}"></script>
+</head>
+<body>
+<div class="panel admin-panel">
+    <div class="panel-head" id="add"><strong><span class="icon-pencil-square-o"></span>修改问题</strong></div>
+    <div class="body-content">
+        <form method="post" class="form-x" th:action="@{../project/editBugInfo(action='edit',bugId=${buginfo.bugId})}">
+            <div class="form-group">
+                <div class="label">
+                    <label>问题名称：</label>
+                </div>
+                <div class="field">
+                    <input type="text" readonly="readonly" class="input w50" th:value="${buginfo.bugName}"
+                           name="bugName"
+                           data-validate="required:请输入问题名"/>
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>问题类型：</label>
+                </div>
+                <div class="field">
+                    <select name="bugType"
+                            style="padding:10px 10px; border:1px solid #ddd;width: 12.5%;">
+                        <option th:each="bugType : ${bugTypes}" th:if="${buginfo.bugType } == ${bugType.id}"
+                                selected="selected" th:value="${bugType.id}"
+                                th:text="${bugType.name}"></option>
+                        <option th:each="bugType : ${bugTypes}" th:if="${buginfo.bugType } != ${bugType.id}"
+                                th:value="${bugType.id}"
+                                th:text="${bugType.name}"></option>
+                    </select>
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>问题描述：</label>
+                </div>
+                <div class="field">
+                    <textarea class="input" th:text="${buginfo.bugDescribe}" name="bugDescribe"
+                              style=" height:190px;width: 70%"></textarea>
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>问题状态：</label>
+                </div>
+                <div class="field">
+                    <select name="bugStatus"
+                            style="padding:10px 10px; border:1px solid #ddd;width: 12.5%;">
+                        <option th:each="bugStat : ${bugStatus}" th:if="${buginfo.bugStatus } == ${bugStat.id}"
+                                selected="selected" th:value="${bugStat.id}"
+                                th:text="${bugStat.name}"></option>
+                        <option th:each="bugStat : ${bugStatus}" th:if="${buginfo.bugStatus} !=${ bugStat.id}"
+                                th:value="${bugStat.id}"
+                                th:text="${bugStat.name}"></option>
+                    </select>
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>问题优先级：</label>
+                </div>
+                <div class="field">
+                    <select name="bugPriority"
+                            style="padding:10px 10px; border:1px solid #ddd;width: 12.5%;">
+                        <option th:each="bugPriority : ${bugPrioritys}"
+                                th:if="${buginfo.bugPriority} == ${bugPriority.id}" selected="selected"
+                                th:value="${bugPriority.id}"
+                                th:text="${bugPriority.name}"></option>
+                        <option th:each="bugPriority : ${bugPrioritys}"
+                                th:if="${buginfo.bugPriority} !=${ bugPriority.id}" th:value="${bugPriority.id}"
+                                th:text="${bugPriority.name}"></option>
+                    </select>
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>问题指派给：</label>
+                </div>
+                <div class="field">
+                    <select name="bugUser"
+                            style="padding:10px 10px; border:1px solid #ddd;width: 12.5%;">
+                        <option th:each="member : ${members}" th:if="${buginfo.bugUser} == ${member.username}"
+                                selected="selected" th:value="${member.username}"
+                                th:text="${member.cname}"></option>
+                        <option th:each="member : ${members}" th:if="${buginfo.bugUser} !=${ member.username}"
+                                th:value="${member.username}"
+                                th:text="${member.cname}"></option>
+                    </select>
+                    <div class="tips"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="label">
+                    <label></label>
+                </div>
+                <div class="field">
+                    <button class="button bg-main icon-check-square-o" type="submit"> 提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

@@ -17,7 +17,7 @@
 <div class="panel admin-panel">
     <div class="panel-head" id="add"><strong><span class="icon-pencil-square-o"></span>新增用户</strong></div>
     <div class="body-content">
-        <form method="post" name="form" class="form-x">
+        <form id="form_x" class="form-x">
             <div class="form-group">
                 <div class="label">
                     <label>用户账号：</label>
@@ -75,7 +75,7 @@
                     <label></label>
                 </div>
                 <div class="field">
-                    <button class="button bg-main icon-check-square-o" id="addUser"> 提交</button>
+                    <button type="button" class="button bg-main icon-check-square-o" id="addUser"> 提交</button>
                 </div>
             </div>
         </form>
@@ -102,10 +102,18 @@
             data: JSON.stringify(json),
             type: "POST",
             contentType: 'application/json;charset=UTF-8',
-            dataType: 'json',
             success: function (e) {
-                if (e == 'repeat') {
-                    alert('用户名重复');
+                switch (e) {
+                    case 'repeat':
+                        alert('用户账号重复');
+                        break;
+                    case 'ok':
+                        alert('添加成功！');
+                        document.getElementById("form_x").reset();
+                        break;
+                    default:
+                        alert('添加失败！');
+                        break;
                 }
             },
             error: function (e) {
