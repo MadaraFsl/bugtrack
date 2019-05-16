@@ -19,4 +19,6 @@ public interface ProjectService {
 
     List getMemberInProjectByAuthority(Integer projectId, Integer authorityId);
 
+    List getProjectBugInfo(Integer projectId);
+
 }

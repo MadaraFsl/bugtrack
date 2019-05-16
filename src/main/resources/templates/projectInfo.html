@@ -22,91 +22,75 @@
             <thead>
             <tr>
                 <th></th>
+                <th>新问题</th>
                 <th>打开</th>
-                <th>已关闭</th>
+                <th>修复</th>
+                <th>拒绝</th>
+                <th>关闭</th>
+                <th>延期</th>
                 <th>合计</th>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td class="name">
-                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;tracker_id=5">页面</a>
-                </td>
-                <td>
-                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;tracker_id=5">0</a>
-                </td>
-                <td>
-                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;status_id=c&amp;tracker_id=5">0</a>
-                </td>
-                <td class="total">
-                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;status_id=%2A&amp;tracker_id=5">0</a>
-                </td>
+                <td class="name">页面</td>
+                <td th:text="${pageBugVo.newCount}"></td>
+                <td th:text="${pageBugVo.openCount}"></td>
+                <td th:text="${pageBugVo.fixedCount}"></td>
+                <td th:text="${pageBugVo.rejectedCount}"></td>
+                <td th:text="${pageBugVo.closeCount}"></td>
+                <td th:text="${pageBugVo.deferredCount}"></td>
+                <td class="total" th:text="${pageBugVo.countAll}"></td>
             </tr>
             <tr>
-                <td class="name">
-                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;tracker_id=1">BUG</a>
-                </td>
-                <td>
-                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;tracker_id=1">2</a>
-                </td>
-                <td>
-                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;status_id=c&amp;tracker_id=1">33</a>
-                </td>
-                <td class="total">
-                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;status_id=%2A&amp;tracker_id=1">35</a>
-                </td>
+                <td class="name">Bug</td>
+                <td th:text="${bugBugVo.newCount}"></td>
+                <td th:text="${bugBugVo.openCount}"></td>
+                <td th:text="${bugBugVo.fixedCount}"></td>
+                <td th:text="${bugBugVo.rejectedCount}"></td>
+                <td th:text="${bugBugVo.closeCount}"></td>
+                <td th:text="${bugBugVo.deferredCount}"></td>
+                <td class="total" th:text="${bugBugVo.countAll}"></td>
             </tr>
             <tr>
-                <td class="name">
-                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;tracker_id=6">数据</a>
-                </td>
-                <td>
-                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;tracker_id=6">0</a>
-                </td>
-                <td>
-                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;status_id=c&amp;tracker_id=6">0</a>
-                </td>
-                <td class="total">
-                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;status_id=%2A&amp;tracker_id=6">0</a>
-                </td>
+                <td class="name">数据</td>
+                <td th:text="${dataBugVo.newCount}"></td>
+                <td th:text="${dataBugVo.openCount}"></td>
+                <td th:text="${dataBugVo.fixedCount}"></td>
+                <td th:text="${dataBugVo.rejectedCount}"></td>
+                <td th:text="${dataBugVo.closeCount}"></td>
+                <td th:text="${dataBugVo.deferredCount}"></td>
+                <td class="total" th:text="${dataBugVo.countAll}"></td>
             </tr>
             <tr>
-                <td class="name">
-                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;tracker_id=2">需求</a>
-                </td>
-                <td>
-                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;tracker_id=2">2</a>
-                </td>
-                <td>
-                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;status_id=c&amp;tracker_id=2">0</a>
-                </td>
-                <td class="total">
-                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;status_id=%2A&amp;tracker_id=2">2</a>
-                </td>
+                <td class="name">需求</td>
+                <td th:text="${demandBugVo.newCount}"></td>
+                <td th:text="${demandBugVo.openCount}"></td>
+                <td th:text="${demandBugVo.fixedCount}"></td>
+                <td th:text="${demandBugVo.rejectedCount}"></td>
+                <td th:text="${demandBugVo.closeCount}"></td>
+                <td th:text="${demandBugVo.deferredCount}"></td>
+                <td class="total" th:text="${demandBugVo.countAll}"></td>
             </tr>
             <tr>
-                <td class="name">
-                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;tracker_id=3">疑难杂症</a>
-                </td>
-                <td>
-                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;tracker_id=3">0</a>
-                </td>
-                <td>
-                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;status_id=c&amp;tracker_id=3">0</a>
-                </td>
-                <td class="total">
-                    <a href="/redmine/projects/shutcminstrument/issues?set_filter=1&amp;status_id=%2A&amp;tracker_id=3">0</a>
-                </td>
+                <td class="name">疑难杂症</td>
+                <td th:text="${incurableBugVo.newCount}"></td>
+                <td th:text="${incurableBugVo.openCount}"></td>
+                <td th:text="${incurableBugVo.fixedCount}"></td>
+                <td th:text="${incurableBugVo.rejectedCount}"></td>
+                <td th:text="${incurableBugVo.closeCount}"></td>
+                <td th:text="${incurableBugVo.deferredCount}"></td>
+                <td class="total" th:text="${incurableBugVo.countAll}"></td>
             </tr>
             </tbody>
         </table>
         <p>
-            <a href="/redmine/projects/shutcminstrument/issues?set_filter=1">查看所有问题</a>
+            <a th:href="@{../project/projectBug(projectId=${projectId})}">查看所有问题</a>
         </p>
     </div>
     <div class="spent_time box">
         <h3 class="icon icon-time">耗时</h3>
-        <p>0.00 小时</p>
+        <p th:text="${timeConsuming}+'小时'"></p>
     </div>
 </div>
 <div class="right">

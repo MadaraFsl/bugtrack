@@ -9,6 +9,8 @@ import com.bugtracking.vo.UserVO;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.imageio.plugins.common.I18N;
+import com.sun.imageio.plugins.common.I18NImpl;
 import jdk.nashorn.internal.ir.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -20,13 +22,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import sun.security.provider.SHA;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 @Controller
@@ -73,8 +78,17 @@ public class FrameWorkController {
     @RequestMapping("/switchingLanguage")
     public String switchingLanguage(Map map, HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        Object s = session.getAttribute("LOCALE_SESSION_ATTRIBUTE_NAME");
-        localeResolver.setLocale(request, response, Locale.SIMPLIFIED_CHINESE);
+        String s = localeResolver.resolveLocale(request).getLanguage();
+        switch (s) {
+            case "zh":
+                localeResolver.setLocale(request, response, Locale.ENGLISH);
+                break;
+            case "en":
+                localeResolver.setLocale(request, response, Locale.CHINESE);
+                break;
+            default:
+                localeResolver.setLocale(request, response, Locale.CHINESE);
+        }
         return "redirect:/login";
     }
 
@@ -150,5 +164,37 @@ public class FrameWorkController {
             e.printStackTrace();
         }
         return "ok";
+    }
+
+    @RequestMapping("/uploadImg")
+    @ResponseBody
+    public String uploadImg(Map map, HttpServletRequest request) {
+        StandardMultipartHttpServletRequest standardMultipartHttpServletRequest = (StandardMultipartHttpServletRequest) request;
+        Map<String, MultipartFile> fileMap = standardMultipartHttpServletRequest.getFileMap();
+        Set<String> fileNameSet = fileMap.keySet();
+        for (String fileName : fileNameSet) {
+            try {
+                MultipartFile multipartFile = fileMap.get(fileName);
+                File file = new File("src/main/resources/static/images/");
+                if (!file.exists()) {
+                    file.mkdirs();
+                }
+                String suffixIndex = fileName.substring(fileName.lastIndexOf('.'));
+                String name = new Date().getTime() + suffixIndex;
+                String path = file.getPath();
+                InputStream fileInputStream = multipartFile.getInputStream();
+                FileOutputStream fileOutputStream = new FileOutputStream(path + "/" + name);
+                byte[] bytes = new byte[2048];
+                while (fileInputStream.read(bytes) != -1) {
+                    fileOutputStream.write(bytes);
+                }
+                fileOutputStream.flush();
+                fileInputStream.close();
+                fileOutputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return "";
     }
 }

@@ -34,13 +34,13 @@
             <th width="10%">最近更新人</th>
             <th width="10%">开始日期</th>
         </tr>
-        <tr th:each="bugInfo:${bugInfos}">
-            <td th:text="${bugInfo.bugId}"></td>
+        <tr th:each="bugInfo,t:${bugInfos}">
+            <td th:text="${t.index+1}"></td>
             <td th:text="${bugInfo.typeName}"></td>
             <td th:text="${bugInfo.status}"></td>
             <td th:text="${bugInfo.priorityName}"></td>
-            <td><a th:href="@{../project/editBugInfo(action='show',bugId=${bugInfo.bugId})}"
-                   th:text="${bugInfo.name}"></a></td>
+            <td th:if="${!checkAll}"><a th:href="@{../project/editBugInfo(action='show',bugId=${bugInfo.bugId})}" th:text="${bugInfo.name}"></a></td>
+            <td th:if="${checkAll}" th:text="${bugInfo.name}"></td>
             <td th:text="${bugInfo.toUser}"></td>
             <td th:text="${#strings.substring(bugInfo.updateTime,0,16)}"></td>
             <td th:text="${bugInfo.updater}"></td>

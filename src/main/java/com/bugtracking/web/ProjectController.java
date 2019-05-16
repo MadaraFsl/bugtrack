@@ -6,6 +6,7 @@ import com.bugtracking.domain.repository.BugInfoRepository;
 import com.bugtracking.domain.repository.ProjectRepository;
 import com.bugtracking.service.common.ShareService;
 import com.bugtracking.service.project.ProjectService;
+import com.bugtracking.vo.BugVo;
 import com.bugtracking.vo.ProjectVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.time.Year;
 import java.util.Date;
@@ -42,9 +45,10 @@ public class ProjectController {
 
     @RequestMapping("/projectInfo")
     public String projectInfo(Map<String, Object> map, String projectId) {
+        Integer id = Integer.valueOf(projectId);
         map.put("projectId", projectId);
         // 获取管理员集合
-        List<Object[]> managerList = projectService.getMemberInProjectByAuthority(Integer.parseInt(projectId), 4);
+        List<Object[]> managerList = projectService.getMemberInProjectByAuthority(id, 4);
         if (managerList.size() > 0) {
             StringBuilder managerStr = new StringBuilder();
             for (int i = 0; i < managerList.size(); i++) {
@@ -54,7 +58,7 @@ public class ProjectController {
             map.put("managerStr", managerStr);
         }
         // 获取开发者集合
-        List<Object[]> developerList = projectService.getMemberInProjectByAuthority(Integer.parseInt(projectId), 3);
+        List<Object[]> developerList = projectService.getMemberInProjectByAuthority(id, 3);
         if (developerList.size() > 0) {
             StringBuilder developerStr = new StringBuilder();
             for (int i = 0; i < developerList.size(); i++) {
@@ -64,7 +68,7 @@ public class ProjectController {
             map.put("developerStr", developerStr);
         }
         // 获取测试人员集合
-        List<Object[]> testList = projectService.getMemberInProjectByAuthority(Integer.parseInt(projectId), 2);
+        List<Object[]> testList = projectService.getMemberInProjectByAuthority(id, 2);
         if (testList.size() > 0) {
             StringBuilder testStr = new StringBuilder();
             for (int i = 0; i < testList.size(); i++) {
@@ -73,19 +77,86 @@ public class ProjectController {
             testStr.deleteCharAt(testStr.lastIndexOf(","));
             map.put("testStr", testStr);
         }
+        // 耗时计算
+        Project project = projectRepository.getOne(id);
+        Date date = new Date();
+        Date projectDate = project.getProjectCreateTime();
+        Double timeConsuming = (date.getTime() - projectDate.getTime()) / (double) (1000 * 60 * 60);
+        map.put("timeConsuming", String.format("%.2f", timeConsuming));
+
+        // 问题统计
+        // 页面问题
+        BugVo pageBugVo = new BugVo();
+        Integer bugType = 1;
+        pageBugVo.setNewCount(bugInfoRepository.getCount(bugType, 1, id));
+        pageBugVo.setOpenCount(bugInfoRepository.getCount(bugType, 2, id));
+        pageBugVo.setFixedCount(bugInfoRepository.getCount(bugType, 3, id));
+        pageBugVo.setRejectedCount(bugInfoRepository.getCount(bugType, 4, id));
+        pageBugVo.setCloseCount(bugInfoRepository.getCount(bugType, 5, id));
+        pageBugVo.setDeferredCount(bugInfoRepository.getCount(bugType, 6, id));
+        pageBugVo.setCountAll(bugInfoRepository.getCountAll(bugType, id));
+        map.put("pageBugVo", pageBugVo);
+        // Bug
+        BugVo bugBugVo = new BugVo();
+        bugType = 2;
+        bugBugVo.setNewCount(bugInfoRepository.getCount(bugType, 1, id));
+        bugBugVo.setOpenCount(bugInfoRepository.getCount(bugType, 2, id));
+        bugBugVo.setFixedCount(bugInfoRepository.getCount(bugType, 3, id));
+        bugBugVo.setRejectedCount(bugInfoRepository.getCount(bugType, 4, id));
+        bugBugVo.setCloseCount(bugInfoRepository.getCount(bugType, 5, id));
+        bugBugVo.setDeferredCount(bugInfoRepository.getCount(bugType, 6, id));
+        bugBugVo.setCountAll(bugInfoRepository.getCountAll(bugType, id));
+        map.put("bugBugVo", bugBugVo);
+        // 数据问题
+        BugVo dataBugVo = new BugVo();
+        bugType = 3;
+        dataBugVo.setNewCount(bugInfoRepository.getCount(bugType, 1, id));
+        dataBugVo.setOpenCount(bugInfoRepository.getCount(bugType, 2, id));
+        dataBugVo.setFixedCount(bugInfoRepository.getCount(bugType, 3, id));
+        dataBugVo.setRejectedCount(bugInfoRepository.getCount(bugType, 4, id));
+        dataBugVo.setCloseCount(bugInfoRepository.getCount(bugType, 5, id));
+        dataBugVo.setDeferredCount(bugInfoRepository.getCount(bugType, 6, id));
+        dataBugVo.setCountAll(bugInfoRepository.getCountAll(bugType, id));
+        map.put("dataBugVo", dataBugVo);
+        // 新需求
+        BugVo demandBugVo = new BugVo();
+        bugType = 4;
+        demandBugVo.setNewCount(bugInfoRepository.getCount(bugType, 1, id));
+        demandBugVo.setOpenCount(bugInfoRepository.getCount(bugType, 2, id));
+        demandBugVo.setFixedCount(bugInfoRepository.getCount(bugType, 3, id));
+        demandBugVo.setRejectedCount(bugInfoRepository.getCount(bugType, 4, id));
+        demandBugVo.setCloseCount(bugInfoRepository.getCount(bugType, 5, id));
+        demandBugVo.setDeferredCount(bugInfoRepository.getCount(bugType, 6, id));
+        demandBugVo.setCountAll(bugInfoRepository.getCountAll(bugType, id));
+        map.put("demandBugVo", demandBugVo);
+        // 新需求
+        BugVo incurableBugVo = new BugVo();
+        bugType = 5;
+        incurableBugVo.setNewCount(bugInfoRepository.getCount(bugType, 1, id));
+        incurableBugVo.setOpenCount(bugInfoRepository.getCount(bugType, 2, id));
+        incurableBugVo.setFixedCount(bugInfoRepository.getCount(bugType, 3, id));
+        incurableBugVo.setRejectedCount(bugInfoRepository.getCount(bugType, 4, id));
+        incurableBugVo.setCloseCount(bugInfoRepository.getCount(bugType, 5, id));
+        incurableBugVo.setDeferredCount(bugInfoRepository.getCount(bugType, 6, id));
+        incurableBugVo.setCountAll(bugInfoRepository.getCountAll(bugType, id));
+        map.put("incurableBugVo", incurableBugVo);
 
         return "projectInfo";
     }
 
 
     @RequestMapping("/projectBug")
-    public String projectBug(Map<String, Object> map) {
-
+    public String projectBug(Map<String, Object> map, HttpServletRequest request) {
         Integer currPage = 1;
         Integer pageSize = 20;
-
-        map.put("bugInfos", projectService.getMyBugInfo(shareService.getUser().getUsername(), currPage - 1, pageSize));
-
+        try {
+            Integer projectId = Integer.valueOf(request.getParameter("projectId"));
+            map.put("bugInfos", projectService.getProjectBugInfo(projectId));
+            map.put("checkAll", true);
+        } catch (NumberFormatException e) {
+            map.put("bugInfos", projectService.getMyBugInfo(shareService.getUser().getUsername(), currPage - 1, pageSize));
+            map.put("checkAll", false);
+        }
         return "projectBug";
     }
 
@@ -98,7 +169,7 @@ public class ProjectController {
                     break;
                 case "add":
                     try {
-                        project.setProjectCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                        project.setProjectCreateTime(new Date());
                         project = projectRepository.saveAndFlush(project);
                         String[] users = new String[1];
                         users[0] = shareService.getUser().getUsername();

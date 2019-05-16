@@ -1,6 +1,7 @@
 package com.bugtracking.domain.entity;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "project")
@@ -27,13 +28,13 @@ public class Project {
     private String projectDatabaseUrl;
 
     @Column(name = "project_createTime")
-    private String projectCreateTime;
+    private Date projectCreateTime;
 
-    public String getProjectCreateTime() {
+    public Date getProjectCreateTime() {
         return projectCreateTime;
     }
 
-    public void setProjectCreateTime(String projectCreateTime) {
+    public void setProjectCreateTime(Date projectCreateTime) {
         this.projectCreateTime = projectCreateTime;
     }
 

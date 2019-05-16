@@ -8,16 +8,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <meta name="renderer" content="webkit">
     <title></title>
-    <link rel="stylesheet" type="text/css" th:href="@{../css/pintuer.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/pintuer2.css}">
     <link rel="stylesheet" type="text/css" th:href="@{../css/admin.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/wangEditor.css}">
     <script type="text/javascript" th:src="@{../js/jquery.js}"></script>
     <script type="text/javascript" th:src="@{../js/pintuer.js}"></script>
+    <script type="text/javascript" src="../js/wangEditor.min.js"></script>
 </head>
 <body>
 <div class="panel admin-panel">
     <div class="panel-head" id="add"><strong><span class="icon-pencil-square-o"></span>新建问题</strong></div>
     <div class="body-content">
-        <form method="post" class="form-x" th:action="@{addBug(action='add')}">
+        <form method="post" id="form" class="form-x" th:action="@{addBug(action='add')}">
             <input type="hidden" name="bugProject" th:value="${projectId}"/>
             <div class="form-group">
                 <div class="label">
@@ -47,8 +49,9 @@
                     <label>问题描述：</label>
                 </div>
                 <div class="field">
-                    <textarea class="input" name="bugDescribe"
-                              style=" height:190px;width: 70%"></textarea>
+                    <textarea class="input" id="bugDescribe" name="bugDescribe"
+                              style="display: none"></textarea>
+                    <div id="editor"></div>
                     <div class="tips"></div>
                 </div>
             </div>
@@ -107,12 +110,23 @@
                     <label></label>
                 </div>
                 <div class="field">
-                    <button class="button bg-main icon-check-square-o" type="submit"> 提交</button>
+                    <button class="button bg-main icon-check-square-o" type="button" onclick="post()"> 提交</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
-
 </body>
+<script type="text/javascript">
+    var E = window.wangEditor;
+    var editor = new E('#editor');
+    editor.customConfig.uploadImgShowBase64 = true;
+    // editor.customConfig.uploadImgServer = '/uploadImg';
+    editor.create();
+
+    function post() {
+        $('#bugDescribe').val(editor.txt.html());
+        $('#form').submit();
+    }
+</script>
 </html>

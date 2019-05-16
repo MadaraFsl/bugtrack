@@ -2,8 +2,9 @@ package com.bugtracking;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
-@SpringBootApplication
+@SpringBootApplication()
 public class BugtrackingApplication {
 
     public static void main(String[] args) {
