@@ -19,7 +19,7 @@
 <div class="panel admin-panel">
     <div class="panel-head" id="add"><strong><span class="icon-pencil-square-o"></span>新建问题</strong></div>
     <div class="body-content">
-        <form method="post" id="form" class="form-x" th:action="@{addBug(action='add')}">
+        <form method="post" id="bugForm" class="form-x" th:action="@{addBug(action='add')}">
             <input type="hidden" name="bugProject" th:value="${projectId}"/>
             <div class="form-group">
                 <div class="label">
@@ -125,8 +125,9 @@
     editor.create();
 
     function post() {
-        $('#bugDescribe').val(editor.txt.html());
-        $('#form').submit();
+        var s = editor.txt.html();
+        $('#bugDescribe').val(s);
+        $('#bugForm').submit();
     }
 </script>
 </html>

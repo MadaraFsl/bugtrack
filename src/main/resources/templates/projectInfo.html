@@ -17,7 +17,11 @@
 <body>
 <div class="left">
     <div class="issues box">
-        <h3 class="icon icon-issue"><a th:href="@{../project/addBug(action='show',projectId=${projectId})}">问题</a></h3>
+        <h3 th:text="${projectName}"></h3>
+        <hr/>
+        <h3 class="icon icon-issue">
+            <a th:href="@{../project/addBug(action='show',projectId=${projectId})}">新建问题</a>
+        </h3>
         <table class="list issue-report">
             <thead>
             <tr>
@@ -86,11 +90,13 @@
         </table>
         <p>
             <a th:href="@{../project/projectBug(projectId=${projectId})}">查看所有问题</a>
+            <a th:href="@{../project/projectBug(projectId=${projectId},isMe='yes')}">查看所有指给我的问题</a>
         </p>
+
     </div>
     <div class="spent_time box">
         <h3 class="icon icon-time">耗时</h3>
-        <p th:text="${timeConsuming}+'小时'"></p>
+        <p th:text="${timeConsuming}"></p>
     </div>
 </div>
 <div class="right">

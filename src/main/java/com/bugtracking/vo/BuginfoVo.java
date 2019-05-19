@@ -11,6 +11,15 @@ public class BuginfoVo {
     private String updateTime;
     private String updater;
     private String beginTime;
+    private String endTime;
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
 
     public Integer getBugId() {
         return bugId;

@@ -21,4 +21,6 @@ public interface ProjectService {
 
     List getProjectBugInfo(Integer projectId);
 
+    List getProjectBugInfoToMe(Integer projectId, String username);
+
 }

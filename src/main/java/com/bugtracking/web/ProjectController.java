@@ -82,7 +82,14 @@ public class ProjectController {
         Date date = new Date();
         Date projectDate = project.getProjectCreateTime();
         Double timeConsuming = (date.getTime() - projectDate.getTime()) / (double) (1000 * 60 * 60);
-        map.put("timeConsuming", String.format("%.2f", timeConsuming));
+        Integer dayConsuming = timeConsuming.intValue() / 24;
+        if (timeConsuming > 24) {
+            map.put("timeConsuming", dayConsuming + "天");
+        } else {
+            String s = String.format("%.2f", timeConsuming);
+            map.put("timeConsuming", s + "小时");
+        }
+        map.put("projectName", project.getProjectName());
 
         // 问题统计
         // 页面问题
@@ -151,8 +158,13 @@ public class ProjectController {
         Integer pageSize = 20;
         try {
             Integer projectId = Integer.valueOf(request.getParameter("projectId"));
-            map.put("bugInfos", projectService.getProjectBugInfo(projectId));
-            map.put("checkAll", true);
+            if ("yes".equals(request.getParameter("isMe"))) {
+                map.put("bugInfos", projectService.getProjectBugInfoToMe(projectId, shareService.getUser().getUsername()));
+                map.put("checkAll", false);
+            } else {
+                map.put("bugInfos", projectService.getProjectBugInfo(projectId));
+                map.put("checkAll", true);
+            }
         } catch (NumberFormatException e) {
             map.put("bugInfos", projectService.getMyBugInfo(shareService.getUser().getUsername(), currPage - 1, pageSize));
             map.put("checkAll", false);
